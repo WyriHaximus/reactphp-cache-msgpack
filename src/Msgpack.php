@@ -21,32 +21,38 @@ final class Msgpack implements CacheInterface
     }
 
     /**
-     * @param  string           $key
+     * @param $key
+     * @param  null             $default
      * @return PromiseInterface
      */
-    public function get($key)
+    public function get($key, $default = null)
     {
-        return $this->cache->get($key)->then(function ($result) {
-            return msgpack_unpack($result, true);
+        return $this->cache->get($key, $default)->then(function ($result) use ($default) {
+            if ($result === null || $result === $default) {
+                return $result;
+            }
+
+            return msgpack_unpack($result);
         });
     }
 
     /**
      * @param  string           $key
      * @param  mixed            $value
+     * @param  null             $ttl
      * @return PromiseInterface
      */
-    public function set($key, $value)
+    public function set($key, $value, $ttl = null)
     {
-        return $this->cache->set($key, msgpack_pack($value));
+        return $this->cache->set($key, msgpack_pack($value), $ttl);
     }
 
     /**
      * @param  string           $key
      * @return PromiseInterface
      */
-    public function remove($key)
+    public function delete($key)
     {
-        return $this->cache->remove($key);
+        return $this->cache->delete($key);
     }
 }

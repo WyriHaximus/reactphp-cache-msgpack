@@ -18,10 +18,21 @@ final class MsgpackTest extends TestCase
         $string = msgpack_pack($json);
 
         $cache = $this->prophesize(CacheInterface::class);
-        $cache->get($key)->shouldBeCalled()->willReturn(resolve($string));
+        $cache->get($key, null)->shouldBeCalled()->willReturn(resolve($string));
 
         $jsonCache = new Msgpack($cache->reveal());
         self::assertSame($json, $this->await($jsonCache->get($key)));
+    }
+
+    public function testGetNullShouldBeIgnored()
+    {
+        $key = 'sleutel';
+
+        $cache = $this->prophesize(CacheInterface::class);
+        $cache->get($key, null)->shouldBeCalled()->willReturn(resolve(null));
+
+        $jsonCache = new Msgpack($cache->reveal());
+        self::assertNull($this->await($jsonCache->get($key)));
     }
 
     public function testSet()
@@ -33,7 +44,7 @@ final class MsgpackTest extends TestCase
         $string = msgpack_pack($json);
 
         $cache = $this->prophesize(CacheInterface::class);
-        $cache->set($key, $string)->shouldBeCalled();
+        $cache->set($key, $string, null)->shouldBeCalled();
 
         $jsonCache = new Msgpack($cache->reveal());
         $jsonCache->set($key, $json);
@@ -44,9 +55,9 @@ final class MsgpackTest extends TestCase
         $key = 'sleutel';
 
         $cache = $this->prophesize(CacheInterface::class);
-        $cache->remove($key)->shouldBeCalled();
+        $cache->delete($key)->shouldBeCalled();
 
         $jsonCache = new Msgpack($cache->reveal());
-        $jsonCache->remove($key);
+        $jsonCache->delete($key);
     }
 }
