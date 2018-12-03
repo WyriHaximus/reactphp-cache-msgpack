@@ -7,9 +7,12 @@ use React\Cache\CacheInterface;
 use WyriHaximus\React\Cache\Msgpack;
 use function React\Promise\resolve;
 
+/**
+ * @internal
+ */
 final class MsgpackTest extends TestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $key = 'sleutel';
         $json = [
@@ -24,7 +27,7 @@ final class MsgpackTest extends TestCase
         self::assertSame($json, $this->await($jsonCache->get($key)));
     }
 
-    public function testGetNullShouldBeIgnored()
+    public function testGetNullShouldBeIgnored(): void
     {
         $key = 'sleutel';
 
@@ -35,7 +38,7 @@ final class MsgpackTest extends TestCase
         self::assertNull($this->await($jsonCache->get($key)));
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $key = 'sleutel';
         $json = [
@@ -50,7 +53,7 @@ final class MsgpackTest extends TestCase
         $jsonCache->set($key, $json);
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $key = 'sleutel';
 
