@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "react/cache": "^0.6.0",
+        "react/cache": "^0.6.0 || ^1.0.0",
         "wyrihaximus/msgpack": "^1.0"
     },
     "require-dev": {
